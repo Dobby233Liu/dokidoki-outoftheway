@@ -1,37 +1,28 @@
-﻿## This template version is 4.0.0. When asked to provide the template version
-## you are using, give them this version number. 
-### DO NOT REMOVE OR CHANGE THE ABOVE COMMENT. ###
+﻿## This mod is based on DDLC Mod Template version 4.0.0,
+## Python 3/Ren'Py 8 variant.
+# When asked to provide the version of the template you are using,
+# provide this version number.
 
 ## options.rpy
 # This file customizes what your mod is and and how it starts and builds!
 
 # This controls what your mod is called.
-define config.name = "DDLC Mod Template – Python 3 Edition"
+define config.name = "DDLC Mod Template"
 
-# This controls whether you want your mod name to show in the main menu.
-# If your mod name is big, it is suggested to turn this off.
-define gui.show_name = True
-
-# This controls the version number of your mod.
+# Version number of your mod.
 define config.version = "4.0.0–Py3"
 
-# This adds information about your mod in the About screen.
-# DDLC does not have a 'About' screen so you can leave this blank.
-define gui.about = _("")
-
-# This control the name of your mod build when you package your mod
-# in the Ren'Py Launcher or DDMM (Doki Doki Mod Maker).
-# Note:
-#   The build name is ASCII only so no numbers, spaces, or semicolons.
+# This control the name of your mod build when you package your mod.
+# The build name is ASCII only so no numbers, spaces, or semicolons.
 define build.name = "DDLCModTemplateTwo-Py3"
 
-# This configures whether your mod has sound effects.
+# Shows the sound volume slider.
 define config.has_sound = True
 
-# This configures whether your mod has music.
+# Shows the music volume slider.
 define config.has_music = True
 
-# This configures whether your mod has voices.
+# Shows the voice volume slider.
 define config.has_voice = True
 
 # This configures what music will play when you launch your mod and in the 
@@ -75,6 +66,9 @@ default preferences.afm_time = 15
 default preferences.music_volume = 0.75
 default preferences.sfx_volume = 0.75
 
+# This controls whether the gamepad is enabled.
+default preferences.pad_enabled = False
+
 # This controls the save folder name of your mod.
 # Finding your Saves:
 #   Windows: %AppData%/RenPy/
@@ -109,10 +103,8 @@ define config.gl_test_image = "white"
 define config.atl_start_on_show = False
 
 init python:
-    if len(renpy.loadsave.location.locations) > 1:
-        renpy.loadsave.location.locations = [renpy.loadsave.location.locations[0]]
-
-    renpy.game.preferences.pad_enabled = False
+    # Replaces '--' or ' - ' in spoken dialogue
+    # to U+2014 EM DASH.
     def replace_text(s):
         s = s.replace('--', u'\u2014') 
         s = s.replace(' - ', u'\u2014') 
@@ -120,17 +112,24 @@ init python:
 
     config.replace_text = replace_text
 
-    def game_menu_check():
-        if quick_menu:
-            renpy.call_in_new_context('_game_menu')
+    # Makes the game only allow opening the game menu
+    # when quick menu is enabled.
+    def game_menu_action():
+        if not quick_menu:
+            return
+        renpy.call_in_new_context('_game_menu')
 
-    config.game_menu_action = game_menu_check
+    config.game_menu_action = game_menu_action
 
+    # Allows only integer multiples of the original screen size
+    # when the size of the physical window is changed.
     def force_integer_multiplier(width, height):
         if float(width) / float(height) < float(config.screen_width) / float(config.screen_height):
             return (width, float(width) / (float(config.screen_width) / float(config.screen_height)))
         else:
             return (float(height) * (float(config.screen_width) / float(config.screen_height)), height)
+
+    config.adjust_view_size = force_integer_multiplier
 
 ## Build configuration #########################################################
 ##
@@ -154,7 +153,7 @@ init python:
 
     # This declares a package to build a IPG compliant distribution
     # of this mod.
-    build.package("mod", 'zip', 'windows linux mac renpy mod',
+    build.package("mod", 'zip', 'windows linux mac renpy',
         description="Ren'Py 8 DDLC Compliant Mod")
 
     # This declares the archives in the distribution.
@@ -195,10 +194,10 @@ init python:
     build.classify('**/thumbs.db', None)
     build.classify('**.psd', None)
 
-    build.classify('README.html','mod all')
+    build.classify('README.html', 'mod all')
     build.classify('README.linux', 'linux')
    
-    # This sets README.html as documentation
+    # This sets README.html as a documentation
     build.documentation('README.html')
 
     build.include_old_themes = False

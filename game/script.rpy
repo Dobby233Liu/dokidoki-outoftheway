@@ -27,15 +27,5 @@ label start:
     $ config.allow_skipping = True
 
     ## The Main Part of the Script
-    return
 
-# This label is where the game 'ends' during Act 1.
-label endgame(pause_length=4.0):
-    $ quick_menu = False
-    stop music fadeout 2.0
-    scene black
-    show end
-    with dissolve_scene_full
-    pause pause_length
-    $ quick_menu = True
     return

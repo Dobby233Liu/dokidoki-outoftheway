@@ -7,7 +7,7 @@
 ## on line 379
 
 init -2 python:
-    # This sets the resolution of DDLC to 1280x720p
+    # This sets the game's resolution to 1280x720.
     gui.init(1280, 720)
 
 ## GUI Sounds
