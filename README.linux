@@ -1,8 +1,9 @@
+To start this mod on Linux, start the mod by running ./LinuxLauncher.sh instead
+of running it via DDLC.sh or the mod's own script file.
+The new script file fixes a issue with mods running on Linux caused by leftover
+Ren'Py 6 files.
 
-To start this mod on Linux, start the mod by running './LinuxLauncher.sh' (without quotes) instead
-of running it via DDLC.sh or the mod's own SH file. This new SH file fixes a issue with mods running
-on Linux due to a import error by old Ren'Py 6 files.
-
-If you get a error with the SH file, make sure it's set to LF and not CRLF via a Text Editor.
+If you get a error with the script file, make sure the line endings in the file are LF
+instead of CRLF; this can be done with dos2unix or with a text editor.
 
 That is all. Happy mod playing!

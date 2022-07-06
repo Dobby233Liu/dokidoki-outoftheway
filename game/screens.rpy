@@ -27,10 +27,6 @@ init python:
 
 default translations = scan_translations()
 
-# Enables the ability to add more settings in the game such as uncensored mode.
-default extra_settings = True
-default enable_extras_menu = True
-
 ## Color Styles
 ################################################################################
 
@@ -384,23 +380,6 @@ style choice_button_text is default:
     outlines []
 
 
-init python:
-    def RigMouse():
-        currentpos = renpy.get_mouse_pos()
-        targetpos = [640, 345]
-        if currentpos[1] < targetpos[1]:
-            renpy.display.draw.set_mouse_pos((currentpos[0] * 9 + targetpos[0]) / 10.0, (currentpos[1] * 9 + targetpos[1]) / 10.0)
-
-screen rigged_choice(items):
-    style_prefix "choice"
-
-    vbox:
-        for i in items:
-            textbutton i.caption action i.action
-
-    timer 1.0/30.0 repeat True action Function(RigMouse)
-
-
 ## Quick Menu screen ###########################################################
 ##
 ## The quick menu is displayed in-game to provide easy access to the out-of-game
@@ -459,14 +438,6 @@ style quick_button_text:
 ## This screen is included in the main and game menus, and provides navigation
 ## to other menus, and to start the game.
 
-init python:
-    def FinishEnterName():
-        if not player: return
-        persistent.playername = player
-        renpy.save_persistent()
-        renpy.hide_screen("name_input")
-        renpy.jump_out_of_context("start")
-
 screen navigation():
 
     vbox:
@@ -477,50 +448,24 @@ screen navigation():
 
         spacing gui.navigation_spacing
 
-        if not persistent.autoload or not main_menu:
+        if main_menu:
+            textbutton _("New Game") action If(persistent.playername, true=Start(), false=Show(screen="name_input", message="Please enter your name", ok_action=Function(FinishEnterName)))
 
-            if main_menu:
-
-                if persistent.playthrough == 1:
-                    textbutton _("ŔŗñĮ¼»ŧþŀÂŻŕěōì«") action If(persistent.playername, true=Start(), false=Show(screen="name_input", message="Please enter your name", ok_action=Function(FinishEnterName)))
-                else:
-                    textbutton _("New Game") action If(persistent.playername, true=Start(), false=Show(screen="name_input", message="Please enter your name", ok_action=Function(FinishEnterName)))
-
-            else:
-
-                textbutton _("History") action [ShowMenu("history"), SensitiveIf(renpy.get_screen("history") == None)]
-
-                textbutton _("Save Game") action [ShowMenu("save"), SensitiveIf(renpy.get_screen("save") == None)]
-
-            textbutton _("Load Game") action [ShowMenu("load"), SensitiveIf(renpy.get_screen("load") == None)]
-
-            if enable_extras_menu:
-                textbutton _("Extras") action [ShowMenu("extras"), SensitiveIf(renpy.get_screen("extras") == None)]
-
-            if _in_replay:
-
-                textbutton _("End Replay") action EndReplay(confirm=True)
-
-            elif not main_menu:
-                if persistent.playthrough != 3:
-                    textbutton _("Main Menu") action MainMenu()
-                else:
-                    textbutton _("Main Menu") action NullAction()
-
-            textbutton _("Settings") action [ShowMenu("preferences"), SensitiveIf(renpy.get_screen("preferences") == None)]
-
-            if not enable_extras_menu:
-                textbutton _("Credits") action ShowMenu("about")
-
-            if renpy.variant("pc"):
-
-                ## Help isn't necessary or relevant to mobile devices.
-                textbutton _("Help") action [Help("README.html"), Show(screen="dialog", message="The help file has been opened in your browser.", ok_action=Hide("dialog"))]
-
-                ## The quit button is banned on iOS and unnecessary on Android.
-                textbutton _("Quit") action Quit(confirm=not main_menu)
         else:
-            timer 1.75 action Start("autoload_yurikill")
+            textbutton _("History") action [ShowMenu("history"), SensitiveIf(renpy.get_screen("history") == None)]
+            textbutton _("Save Game") action [ShowMenu("save"), SensitiveIf(renpy.get_screen("save") == None)]
+        textbutton _("Load Game") action [ShowMenu("load"), SensitiveIf(renpy.get_screen("load") == None)]
+        if _in_replay:
+            textbutton _("End Replay") action EndReplay(confirm=True)
+        elif not main_menu:
+            textbutton _("Main Menu") action MainMenu()
+        textbutton _("Settings") action [ShowMenu("preferences"), SensitiveIf(renpy.get_screen("preferences") == None)]
+        textbutton _("Credits") action ShowMenu("about")
+        if renpy.variant("pc"):
+            ## Help isn't necessary or relevant to mobile devices.
+            textbutton _("Help") action [Help("README.html"), Show(screen="dialog", message="The help file has been opened in your browser.", ok_action=Hide("dialog"))]
+            ## The quit button is banned on iOS and unnecessary on Android.
+            textbutton _("Quit") action Quit(confirm=not main_menu)
 
 
 style navigation_button is gui_button
@@ -541,6 +486,50 @@ style navigation_button_text:
     hover_outlines [(4, "#fac", 0, 0), (2, "#fac", 2, 2)]
     insensitive_outlines [(4, "#fce", 0, 0), (2, "#fce", 2, 2)]
 
+screen name_input(message, ok_action):
+
+    ## Ensure other screens do not get input while this screen is displayed.
+    modal True
+
+    zorder 200
+
+    style_prefix "confirm"
+
+    add "gui/overlay/confirm.png"
+    key "K_RETURN" action [Play("sound", gui.activate_sound), ok_action]
+
+    frame:
+
+        vbox:
+            xalign .5
+            yalign .5
+            spacing 30
+
+            label _(message):
+                style "confirm_prompt"
+                xalign 0.5
+
+            input default "" value VariableInputValue("player") length 12 allow "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+            #additionally added Cyrillic characters to support Russian names for MC
+
+            hbox:
+                xalign 0.5
+                spacing 100
+
+                textbutton _("OK") action ok_action
+
+init python:
+    # Logic:
+    # name input screen sets player variable ->
+    # ok pressed ->
+    # calls this
+    def FinishEnterName():
+        if not player: return
+        persistent.playername = player
+        renpy.save_persistent()
+        renpy.hide_screen("name_input")
+        renpy.jump_out_of_context("start")
+
 
 ## Main Menu screen ############################################################
 ##
@@ -555,37 +544,18 @@ screen main_menu():
 
     style_prefix "main_menu"
 
-    if persistent.ghost_menu:
-        add "white"
-        add "menu_art_y_ghost"
-        add "menu_art_n_ghost"
-    else:
-        add "menu_bg"
-        add "menu_art_y"
-        add "menu_art_n"
-        frame
+    frame
 
-        ## The use statement includes another screen inside this one. The actual
-        ## contents of the main menu are in the navigation screen.
-        use navigation
+    ## The use statement includes another screen inside this one. The actual
+    ## contents of the main menu are in the navigation screen.
+    use navigation
 
-    if not persistent.ghost_menu:
-        add "menu_particles"
-        add "menu_particles"
-        add "menu_particles"
-        add "menu_logo"
-    if persistent.ghost_menu:
-        add "menu_art_s_ghost"
-        add "menu_art_m_ghost"
-    else:
-        if persistent.playthrough == 1 or persistent.playthrough == 2:
-            add "menu_art_s_glitch"
-        else:
-            add "menu_art_s"
-        add "menu_particles"
-        if persistent.playthrough != 4:
-            add "menu_art_m"
-        add "menu_fade"
+    add "menu_particles"
+    add "menu_particles"
+    add "menu_particles"
+    add "menu_logo"
+    add "menu_particles"
+    add "menu_fade"
 
     if gui.show_name:
 
@@ -700,9 +670,6 @@ screen game_menu(title, scroll=None):
                     transclude
 
     use navigation
-
-    if not main_menu and persistent.playthrough == 2 and not persistent.menu_bg_m and renpy.random.randint(0, 49) == 0:
-        on "show" action Show("game_menu_m")
 
     textbutton _("Return"):
         style "return_button"
@@ -859,16 +826,6 @@ screen load():
 
     use file_slots(_("Load"))
 
-init python:
-    def FileActionMod(name, page=None, **kwargs):
-        if persistent.playthrough == 1 and not persistent.deleted_saves and renpy.current_screen().screen_name[0] == "load" and FileLoadable(name):
-            return Show(screen="dialog", message="File error: \"characters/sayori.chr\"\n\nThe file is missing or corrupt.",
-                ok_action=Show(screen="dialog", message="The save file is corrupt. Starting a new game.", ok_action=Function(renpy.full_restart, label="start")))
-        elif persistent.playthrough == 3 and renpy.current_screen().screen_name[0] == "save":
-            return Show(screen="dialog", message="There's no point in saving anymore.\nDon't worry, I'm not going anywhere.", ok_action=Hide("dialog"))
-        else:
-            return FileAction(name)
-
 
 screen file_slots(title):
 
@@ -909,7 +866,7 @@ screen file_slots(title):
                     $ slot = i + 1
 
                     button:
-                        action FileActionMod(slot)
+                        action FileAction(slot)
 
                         has vbox
 
@@ -1003,10 +960,7 @@ screen preferences():
     use game_menu(_("Settings"), scroll="viewport"):
 
         vbox:
-            if extra_settings:
-                xoffset 35
-            else:
-                xoffset 50
+            xoffset 50
 
             hbox:
                 box_wrap True
@@ -1032,23 +986,6 @@ screen preferences():
                     textbutton _("Unseen Text") action Preference("skip", "toggle")
                     textbutton _("After Choices") action Preference("after choices", "toggle")
                     #textbutton _("Transitions") action InvertSelected(Preference("transitions", "toggle"))
-                
-                if extra_settings:
-                    vbox:
-                        style_prefix "check"
-                        label _("Extra Settings")
-                        textbutton _("Uncensored Mode") action If(persistent.uncensored_mode, 
-                            ToggleField(persistent, "uncensored_mode"), 
-                            Show("confirm", message="Are you sure you want to turn on Uncensored Mode?\nDoing so will enable more adult/sensitive\ncontent in your playthrough.\n\nThis setting will be dependent on the modder if\nthey programmed these checks in their story.", 
-                                yes_action=[Hide("confirm"), ToggleField(persistent, "uncensored_mode")],
-                                no_action=Hide("confirm")
-                            ))
-                        textbutton _("Let's Play Mode") action If(persistent.lets_play, 
-                            ToggleField(persistent, "lets_play"),
-                            [ToggleField(persistent, "lets_play"), Show("dialog", 
-                                message="You have enabled Let's Play Mode.\nThis mode allows you to skip content that\ncontains sensitive information or apply alternative\nstory options.\n\nThis setting will be dependent on the modder\nif they programmed these checks in their story.", 
-                                ok_action=Hide("dialog")
-                            )])
                             
 
                 ## Additional vboxes of type "radio_pref" or "check_pref" can be
@@ -1057,8 +994,6 @@ screen preferences():
             null height (4 * gui.pref_spacing)
 
             hbox:
-                if extra_settings:
-                    xoffset 15
                 style_prefix "slider"
                 box_wrap True
 
@@ -1074,8 +1009,6 @@ screen preferences():
                     bar value Preference("auto-forward time")
 
                 vbox:
-                    if extra_settings:
-                        xoffset 15
                     
                     if config.has_music:
                         label _("Music Volume")
@@ -1113,8 +1046,6 @@ screen preferences():
             if translations:
                 hbox:
                     style_prefix "radio"
-                    if extra_settings:
-                        xoffset 15   
                     vbox:
                         label _("Language")
 
@@ -1300,199 +1231,9 @@ style history_label_text:
     xalign 0.5
 
 
-## Help screen #################################################################
-##
-## A screen that gives information about key and mouse bindings. It uses other
-## screens (keyboard_help, mouse_help, and gamepad_help) to display the actual
-## help.
-
-#screen help():
-#
-#    tag menu
-#
-#    default device = "keyboard"
-#
-#    use game_menu(_("Help"), scroll="viewport"):
-#
-#        style_prefix "help"
-#
-#        vbox:
-#            spacing 15
-#
-#            hbox:
-#
-#                textbutton _("Keyboard") action SetScreenVariable("device", "keyboard")
-#                textbutton _("Mouse") action SetScreenVariable("device", "mouse")
-#
-#                if GamepadExists():
-#                    textbutton _("Gamepad") action SetScreenVariable("device", "gamepad")
-#
-#            if device == "keyboard":
-#                use keyboard_help
-#            elif device == "mouse":
-#                use mouse_help
-#            elif device == "gamepad":
-#                use gamepad_help
-#
-#
-#screen keyboard_help():
-#
-#    hbox:
-#        label _("Enter")
-#        text _("Advances dialogue and activates the interface.")
-#
-#    hbox:
-#        label _("Space")
-#        text _("Advances dialogue without selecting choices.")
-#
-#    hbox:
-#        label _("Arrow Keys")
-#        text _("Navigate the interface.")
-#
-#    hbox:
-#        label _("Escape")
-#        text _("Accesses the game menu.")
-#
-#    hbox:
-#        label _("Ctrl")
-#        text _("Skips dialogue while held down.")
-#
-#    hbox:
-#        label _("Tab")
-#        text _("Toggles dialogue skipping.")
-#
-#    hbox:
-#        label _("Page Up")
-#        text _("Rolls back to earlier dialogue.")
-#
-#    hbox:
-#        label _("Page Down")
-#        text _("Rolls forward to later dialogue.")
-#
-#    hbox:
-#        label "H"
-#        text _("Hides the user interface.")
-#
-#    hbox:
-#        label "S"
-#        text _("Takes a screenshot.")
-#
-#    hbox:
-#        label "V"
-#        text _("Toggles assistive {a=https://www.renpy.org/l/voicing}self-voicing{/a}.")
-#
-#
-#screen mouse_help():
-#
-#    hbox:
-#        label _("Left Click")
-#        text _("Advances dialogue and activates the interface.")
-#
-#    hbox:
-#        label _("Middle Click")
-#        text _("Hides the user interface.")
-#
-#    hbox:
-#        label _("Right Click")
-#        text _("Accesses the game menu.")
-#
-#    hbox:
-#        label _("Mouse Wheel Up\nClick Rollback Side")
-#        text _("Rolls back to earlier dialogue.")
-#
-#    hbox:
-#        label _("Mouse Wheel Down")
-#        text _("Rolls forward to later dialogue.")
-#
-#
-#screen gamepad_help():
-#
-#    hbox:
-#        label _("Right Trigger\nA/Bottom Button")
-#        text _("Advance dialogue and activates the interface.")
-#
-#    hbox:
-#        label ("Left Trigger\nLeft Shoulder")
-#        text _("Roll back to earlier dialogue.")
-#
-#    hbox:
-#        label _("Right Shoulder")
-#        text _("Roll forward to later dialogue.")
-#
-#    hbox:
-#        label _("D-Pad, Sticks")
-#        text _("Navigate the interface.")
-#
-#    hbox:
-#        label _("Start, Guide")
-#        text _("Access the game menu.")
-#
-#    hbox:
-#        label _("Y/Top Button")
-#        text _("Hides the user interface.")
-#
-#    textbutton _("Calibrate") action GamepadCalibrate()
-#
-#
-#style help_button is gui_button
-#style help_button_text is gui_button_text
-#style help_label is gui_label
-#style help_label_text is gui_label_text
-#style help_text is gui_text
-#
-#style help_button:
-#    properties gui.button_properties("help_button")
-#    xmargin 8
-#
-#style help_button_text:
-#    properties gui.button_text_properties("help_button")
-#
-#style help_label:
-#    xsize 250
-#    right_padding 20
-#
-#style help_label_text:
-#    size gui.text_size
-#    xalign 1.0
-#    text_align 1.0
-
-
-
 ################################################################################
 ## Additional screens
 ################################################################################
-
-screen name_input(message, ok_action):
-
-    ## Ensure other screens do not get input while this screen is displayed.
-    modal True
-
-    zorder 200
-
-    style_prefix "confirm"
-
-    add "gui/overlay/confirm.png"
-    key "K_RETURN" action [Play("sound", gui.activate_sound), ok_action]
-
-    frame:
-
-        vbox:
-            xalign .5
-            yalign .5
-            spacing 30
-
-            label _(message):
-                style "confirm_prompt"
-                xalign 0.5
-
-            input default "" value VariableInputValue("player") length 12 allow "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя"
-            #additionally added Cyrillic characters to support Russian names for MC
-
-            hbox:
-                xalign 0.5
-                spacing 100
-
-                textbutton _("OK") action ok_action
 
 screen dialog(message, ok_action):
 
@@ -1553,12 +1294,6 @@ screen confirm(message, yes_action, no_action):
             yalign .5
             spacing 30
 
-            ## This if-else statement either shows a normal textbox or
-            ## glitched textbox if you are in Sayori's Death Scene and are
-            ## quitting the game.
-            # if in_sayori_kill and message == layout.QUIT:
-            #     add "confirm_glitch" xalign 0.5
-            # else:
             label _(message):
                 style "confirm_prompt"
                 xalign 0.5
@@ -1567,17 +1302,11 @@ screen confirm(message, yes_action, no_action):
                 xalign 0.5
                 spacing 100
 
-                ## This if-else statement disables quitting from the quit box
-                ## if you are in Sayori's Death Scene, else normal box.
-                # if in_sayori_kill and message == layout.QUIT:
-                #     textbutton _("Yes") action NullAction()
-                #     textbutton _("No") action Hide("confirm")
-                # else:
                 textbutton _("Yes") action yes_action
                 textbutton _("No") action no_action
 
     ## Right-click and escape answer "no".
-    #key "game_menu" action no_action
+    key "game_menu" action no_action
 
 
 style confirm_frame is gui_frame

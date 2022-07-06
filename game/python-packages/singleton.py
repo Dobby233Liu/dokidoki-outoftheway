@@ -1,13 +1,13 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
-import sys
 import os
 import tempfile
 import logging
 
 
-class SingleInstanceException(BaseException):
-    pass
+class SingleInstanceException(Exception):
+    def __str__(self):
+        return "Another instance of this game is already running."
 
 
 class SingleInstance:
@@ -21,16 +21,13 @@ class SingleInstance:
     This option is very useful if you have scripts executed by crontab at small amounts of time.
 
     Remember that this works by creating a lock file with a filename based on the full path to the script file.
-
-    Providing a flavor_id will augment the filename with the provided flavor_id, allowing you to create multiple singleton instances from the same file. This is particularly useful if you want specific functions to have their own singleton instances.
     """
 
-    def __init__(self, flavor_id=""):
+    def __init__(self):
         import sys
         self.initialized = False
         basename = os.path.splitext(os.path.abspath(sys.argv[0]))[0].replace(
-            "/", "-").replace(":", "").replace("\\", "-") + '-%s' % flavor_id + '.lock'
-        # os.path.splitext(os.path.abspath(sys.modules['__main__'].__file__))[0].replace("/", "-").replace(":", "").replace("\\", "-") + '-%s' % flavor_id + '.lock'
+            "/", "-").replace(":", "").replace("\\", "-") + '.lock'
         self.lockfile = os.path.normpath(
             tempfile.gettempdir() + '/' + basename)
 
@@ -46,8 +43,6 @@ class SingleInstance:
             except OSError:
                 type, e, tb = sys.exc_info()
                 if e.errno == 13:
-                    logger.error(
-                        "Another instance is already running, quitting.")
                     raise SingleInstanceException()
                 print(e.errno)
                 raise
@@ -58,8 +53,6 @@ class SingleInstance:
             try:
                 fcntl.lockf(self.fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
             except IOError:
-                logger.warning(
-                    "Another instance is already running, quitting.")
                 raise SingleInstanceException()
         self.initialized = True
 
@@ -85,17 +78,6 @@ class SingleInstance:
             else:
                 print("Unloggable error: %s" % e)
             sys.exit(-1)
-
-
-def f(name):
-    tmp = logger.level
-    logger.setLevel(logging.CRITICAL)  # we do not want to see the warning
-    try:
-        me2 = SingleInstance(flavor_id=name)  # noqa
-    except SingleInstanceException:
-        sys.exit(-1)
-    logger.setLevel(tmp)
-    pass
 
 logger = logging.getLogger("tendo.singleton")
 logger.addHandler(logging.StreamHandler())

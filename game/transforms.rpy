@@ -60,20 +60,6 @@ transform dip(x=640, z=0.80):
     easein .25 yoffset 25
     easeout .25 yoffset 0
 
-# This transform causes the character to wobble on-screen.
-# This might be a left-over transform from DDLC's development for Natsuki's Closet CG.
-transform panic(x=640, z=0.80):
-    xcenter x yoffset 0 yanchor 1.0 ypos 1.03 zoom z*1.00 alpha 1.00 subpixel True
-    parallel:
-        ease 1.2 yoffset 25
-        ease 1.2 yoffset 0
-        repeat
-    parallel:
-        easein .3 xoffset 20
-        ease .6 xoffset -20
-        easeout .3 xoffset 0
-        repeat
-
 # This transform causes the character to "fly in" (enter the scene) from the left.
 transform leftin(x=640, z=0.80):
     xcenter -300 yoffset 0 yanchor 1.0 ypos 1.03 zoom z*1.00 alpha 1.00 subpixel True
@@ -304,14 +290,6 @@ transform r22:
 transform r11:
     rightin(640)
 
-# This transform acts as in your eyes are opening up to see where you are at.
-transform face(z=0.80, y=500):
-    subpixel True
-    xcenter 640
-    yanchor 1.0 ypos 1.03
-    yoffset y
-    zoom z*2.00
-
 # This transform fades the screen for CGs to be shown/hidden.
 transform cgfade:
     on show:
@@ -320,33 +298,6 @@ transform cgfade:
     on hide:
         alpha 1.0
         linear 0.5 alpha 0.0
-
-# This transform causes Natsuki to wiggle on screen when she panics in her closet CG.
-transform n_cg2_wiggle:
-    subpixel True
-    xoffset 0
-    easein 0.15 xoffset 20
-    easeout 0.15 xoffset 0
-    easein 0.15 xoffset -15
-    easeout 0.15 xoffset 0
-    easein 0.15 xoffset 10
-    easeout 0.15 xoffset 0
-    easein 0.15 xoffset -5
-    ease 0.15 xoffset 0
-
-# This transform loop repeats the wiggle effect each second.
-transform n_cg2_wiggle_loop:
-    n_cg2_wiggle
-    1.0
-    repeat
-
-# This transform causes Natsuki's face to be very close to your face during her 
-# closet CG route.
-transform n_cg2_zoom:
-    subpixel True
-    truecenter
-    xoffset 0
-    easeout 0.20 zoom 2.5 xoffset 200
 
 # This variable defines the effect used by 'dissolve' by characters.
 define dissolve = Dissolve(0.25)
@@ -395,106 +346,6 @@ define wipeleft_scene = MultipleTransition([
     Solid("#000"), ImageDissolve("images/menu/wipeleft.png", 0.5, ramplen=64),
     True])
 
-# This variable is possibly a left-over from DDLC's development.
-# This variable pauses the game for .25 seconds.
-define tpause = Pause(0.25)
-
-# This image transform causes a noise animation to play out.
-image noise:
-    truecenter
-    "images/bg/noise1.jpg"
-    pause 0.1
-    "images/bg/noise2.jpg"
-    pause 0.1
-    "images/bg/noise3.jpg"
-    pause 0.1
-    "images/bg/noise4.jpg"
-    pause 0.1
-    xzoom -1
-    "images/bg/noise1.jpg"
-    pause 0.1
-    "images/bg/noise2.jpg"
-    pause 0.1
-    "images/bg/noise3.jpg"
-    pause 0.1
-    "images/bg/noise4.jpg"
-    pause 0.1
-    yzoom -1
-    "images/bg/noise1.jpg"
-    pause 0.1
-    "images/bg/noise2.jpg"
-    pause 0.1
-    "images/bg/noise3.jpg"
-    pause 0.1
-    "images/bg/noise4.jpg"
-    pause 0.1
-    xzoom 1
-    "images/bg/noise1.jpg"
-    pause 0.1
-    "images/bg/noise2.jpg"
-    pause 0.1
-    "images/bg/noise3.jpg"
-    pause 0.1
-    "images/bg/noise4.jpg"
-    pause 0.1
-    yzoom 1
-    repeat
-
-# This transform causes the noise effect to appear 25% transparent.
-transform noise_alpha:
-    alpha 0.25
-
-# This transform causes the noise effect to appear for a bit then disappear.
-transform noisefade(t=0):
-    alpha 0.0
-    t
-    linear 5.0 alpha 0.40
-
-# This image adds a vignette image for a vignette effect.
-image vignette:
-    truecenter
-    "images/bg/vignette.png"
-
-# This transform has the vignette effect fade in.
-transform vignettefade(t=0):
-    alpha 0.0
-    t
-    linear 25.0 alpha 1.00
-
-# This transform has the vignette effect flicker on-screen.
-transform vignetteflicker(t=0):
-    alpha 0.0
-    t + 2.030
-    parallel:
-        alpha 1.00
-        linear 0.2 alpha 0.8
-        0.1
-        alpha 0.7
-        linear 0.1 alpha 1.00
-        alpha 0.0
-        1.19
-        repeat
-    parallel:
-        easeout 20 zoom 3.0
-
-# This transform causes the screen layer to flicker.
-transform layerflicker(t=0):
-    truecenter
-    t + 2.030
-    parallel:
-        zoom 1.05
-        linear 0.2 zoom 1.04
-        0.1
-        zoom 1.035
-        linear 0.1 zoom 1.05
-        zoom 1.0
-        1.19
-        repeat
-    parallel:
-        easeout_bounce 0.3 xalign 0.6
-        easeout_bounce 0.3 xalign 0.4
-        repeat
-
 # This transform applies the rewind effect seen in Act 2.
 transform rewind:
     truecenter
@@ -507,40 +358,3 @@ transform rewind:
         easeout_bounce 0.33 yalign 0.55
         easeout_bounce 0.33 yalign 0.45
         repeat
-
-# These transforms applies a heartbeat effect on-the screen in some random
-# playthroughs of DDLC.
-transform heartbeat:
-    heartbeat2(1)
-
-transform heartbeat2(m):
-    truecenter
-    parallel:
-        0.144
-        zoom 1.00 + 0.07 * m
-        easein 0.250 zoom 1.00 + 0.04 * m
-        easeout 0.269 zoom 1.00 + 0.07 * m
-        zoom 1.00
-        1.479
-        repeat
-    parallel:
-        easeout_bounce 0.3 xalign 0.5 + 0.02 * m
-        easeout_bounce 0.3 xalign 0.5 - 0.02 * m
-        repeat
-
-# This transform and function controls the animation of Yuri's eyes
-# moving during Act 2.
-transform yuripupils_move:
-    function yuripupils_function
-
-init python:
-    def yuripupils_function(trans, st, at):
-        trans.xoffset = -1 + random.random() * 9 - 4
-        trans.yoffset = 3 + random.random() * 6 - 3
-        return random.random() * 1.2 + 0.3
-
-# This transform makes the character appear on top with a transparency 
-# for a bit during Act 2.
-transform malpha(a=1.00):
-    i11
-    alpha a
