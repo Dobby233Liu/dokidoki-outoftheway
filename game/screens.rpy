@@ -10,7 +10,6 @@ init offset = -1
 # Thanks RenpyTom! Borrowed from the Ren'Py Launcher
 init python:
     def scan_translations():
-
         languages = renpy.known_languages()
 
         if not languages:
@@ -403,14 +402,14 @@ style quick_button_text:
 ## to other menus, and to start the game.
 
 init python:
-    # Logic:
-    # name input screen sets player variable ->
-    # ok pressed ->
-    # calls this
+    # Logic: name input screen sets player variable -> player presses ok -> this is called
     def FinishEnterName():
+        # reject when player doesn't provide name
         if not player: return
+        # we're got to rember that
         persistent.playername = player
         renpy.save_persistent()
+        # start the game
         renpy.hide_screen("name_input")
         renpy.jump_out_of_context("start")
 

@@ -49,7 +49,20 @@ define audio.t1 = "<loop 22.073>bgm/1.ogg" # Doki Doki Literature Club! - Main T
 
 image black = "#000000"
 image white = "#ffffff"
-image splash = "bg/splash.png"
+
+## Team Salvato Splash Screen
+# This image stores the Tean Salvato logo image that appears when the game starts.
+image intro:
+    truecenter
+    "white"
+    0.5
+    "bg/splash.png" with dissolve_intro
+    2.5
+    "white" with dissolve_intro
+    0.5
+
+# Image text for the splash message when the game loads.
+image splash_warning = ParameterizedText(style="splash_text", xalign=0.5, yalign=0.5)
 
 ## Main Menu Images
 # These image transforms store the images and positions of the game logo,
@@ -98,49 +111,6 @@ image menu_particles:
     ypos 104
     ParticleBurst("gui/menu_particle.png", explode_time=0, particles_num=40, total_time=2.0, x_speed=3, y_speed=3).sm
     particle_fadeout
-
-# This transform fades out the particle effects of the main menu
-transform particle_fadeout:
-    easeout 1.5 alpha 0
-
-# This transform moves the polka-dot menu background to the upper-left.
-transform menu_bg_move:
-    subpixel True
-    topleft
-    parallel:
-        xoffset 0 yoffset 0
-        linear 3.0 xoffset -100 yoffset -100
-        repeat
-
-# This transform loops the polka-dot moving effect.
-transform menu_bg_loop:
-    subpixel True
-    topleft
-    parallel:
-        xoffset 0 yoffset 0
-        linear 3.0 xoffset -100 yoffset -100
-        repeat
-
-# This transform moves the menu logo down to it's intended placement in-game.
-transform menu_logo_move:
-    subpixel True
-    yoffset -300
-    time 1.925
-    easein_bounce 1.5 yoffset 0
-
-# This transform moves the main menu screen in-game to be visible.
-transform menu_nav_move:
-    subpixel True
-    xoffset -500
-    time 1.5
-    easein_quint 1 xoffset 0
-
-# This transform fades out the main menu screen. 
-transform menu_fadeout:
-    easeout 0.75 alpha 0
-    time 2.481
-    alpha 0.4
-    linear 0.5 alpha 0
 
 # Characters Images
 # This is where the characters bodies and faces are defined in the mod.

@@ -2,6 +2,51 @@
 
 # This file defines the placements and animations in DDLC.
 
+# Main Menu
+
+# This transform fades out the particle effects of the main menu
+transform particle_fadeout:
+    easeout 1.5 alpha 0
+
+# This transform moves the polka-dot menu background to the upper-left.
+transform menu_bg_move:
+    subpixel True
+    topleft
+    parallel:
+        xoffset 0 yoffset 0
+        linear 3.0 xoffset -100 yoffset -100
+        repeat
+
+# This transform loops the polka-dot moving effect.
+transform menu_bg_loop:
+    subpixel True
+    topleft
+    parallel:
+        xoffset 0 yoffset 0
+        linear 3.0 xoffset -100 yoffset -100
+        repeat
+
+# This transform moves the menu logo down to it's intended placement in-game.
+transform menu_logo_move:
+    subpixel True
+    yoffset -300
+    time 1.925
+    easein_bounce 1.5 yoffset 0
+
+# This transform moves the main menu screen in-game to be visible.
+transform menu_nav_move:
+    subpixel True
+    xoffset -500
+    time 1.5
+    easein_quint 1 xoffset 0
+
+# This transform fades out the main menu screen. 
+transform menu_fadeout:
+    easeout 0.75 alpha 0
+    time 2.481
+    alpha 0.4
+    linear 0.5 alpha 0
+
 # This transform sizes the character properly at the given X position.
 transform tcommon(x=640, z=0.80):
     yanchor 1.0 subpixel True
@@ -11,7 +56,6 @@ transform tcommon(x=640, z=0.80):
         xcenter x yoffset -20
         easein .25 yoffset 0 zoom z*1.00 alpha 1.00
     on replace:
-
         alpha 1.00
         parallel:
             easein .25 xcenter x zoom z*1.00
@@ -25,7 +69,6 @@ transform tinstant(x=640, z=0.80):
 transform focus(x=640, z=0.80):
     yanchor 1.0 ypos 1.03 subpixel True
     on show:
-
         zoom z*0.95 alpha 0.00
         xcenter x yoffset -20
         easein .25 yoffset 0 zoom z*1.05 alpha 1.00
@@ -75,7 +118,6 @@ transform thide(z=0.80):
     subpixel True
     transform_anchor True
     on hide:
-
         easein .25 zoom z*0.95 alpha 0.00 yoffset -20
 
 # This transform hides the character by moving them to the left.
@@ -305,6 +347,8 @@ define dissolve = Dissolve(0.25)
 # These variables define Dissolve(X) for CGs and scenes.
 define dissolve_cg = Dissolve(0.75)
 define dissolve_scene = Dissolve(1.0)
+
+define dissolve_intro = Dissolve(0.5, alpha=True)
 
 # This variable makes the screen dissolve itself to black to show another scene later.
 define dissolve_scene_full = MultipleTransition([

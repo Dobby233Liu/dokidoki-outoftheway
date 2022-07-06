@@ -2,22 +2,6 @@
 
 # This is where the splashscreen, disclaimer and menu code reside in.
 
-define dissolve_intro = Dissolve(0.5, alpha=True)
-
-## Team Salvato Splash Screen
-# This image stores the Tean Salvato logo image that appears when the game starts.
-image intro:
-    truecenter
-    "white"
-    0.5
-    "bg/splash.png" with dissolve_intro
-    2.5
-    "white" with dissolve_intro
-    0.5
-
-# Image text for the splash message when the game loads.
-image splash_warning = ParameterizedText(style="splash_text", xalign=0.5, yalign=0.5)
-
 ## The disclaimer screen that appears when the game starts.
 label splashscreen:
 
