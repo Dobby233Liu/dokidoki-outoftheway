@@ -11,7 +11,7 @@ image splash_warning = ParameterizedText(style="splash_text", xalign=0.5, yalign
 
 # This image shows the DDLC logo in the normal DDLC position.
 image menu_logo:
-    "/mod_assets/DDLCModTemplateLogo.png"
+    "mod_assets/DDLCModTemplateLogo.png"
     subpixel True
     xcenter 240
     ycenter 120
@@ -125,38 +125,9 @@ image intro:
     "white" with Dissolve(0.5, alpha=True)
     0.5
 
-# This image is a left over from DDLC's development that shows the splash message
-# when the game starts.
-image warning:
-    truecenter
-    "white"
-    "splash_warning" with Dissolve(0.5, alpha=True)
-    2.5
-    "white" with Dissolve(0.5, alpha=True)
-    0.5
-
-## These images are the background images shown in-game during the disclaimer.
-image tos = "bg/warning.png"
-image tos2 = "bg/warning2.png"
-
-## This sets the persistent to false in order to choose a language.
-default persistent.has_chosen_language = False
-
-## This sets the first run variable to False to show the disclaimer.
-default persistent.first_run = False
-
-## This sets the lockdown check variable to False to show the warning for developers.
-default persistent.lockdown_warning = False
-
 ## Startup Disclaimer
 ## This label calls the disclaimer screen that appears when the game starts.
 label splashscreen:
-
-    if not persistent.lockdown_warning:
-        if config.developer:
-            call lockdown_check
-        else:
-            $ persistent.lockdown_warning = True
 
     if not persistent.first_run:
         $ quick_menu = False
@@ -167,11 +138,9 @@ label splashscreen:
 
         ## Switch to language selector. Borrowed from Ren'Py
         if not persistent.has_chosen_language and translations:
-
             if _preferences.language is None:
                 call choose_language
-        
-        $ persistent.has_chosen_language = True
+            $ persistent.has_chosen_language = True
 
         ## You can edit this message but you MUST declare that your mod is 
         ## unaffiliated with Team Salvato, requires that the player must 
@@ -208,15 +177,8 @@ label splashscreen:
 
     return
 
-## This label is a left-over from DDLC's development that hides the Team Salvato
-## logo and shows the splash message.
-label warningscreen:
-    hide intro
-    show warning
-    pause 3.0
-
-## This label checks if the save loaded matches the anti-cheat stored in the save.
 label after_load:
+    # Load skipping toggle state saved in the save
     $ config.allow_skipping = allow_skipping
     $ _dismiss_pause = config.developer
     $ style.say_dialogue = style.normal

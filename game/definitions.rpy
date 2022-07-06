@@ -2,6 +2,32 @@
 
 # This file defines important stuff for DDLC and your mod!
 
+python early:
+    # This starts singleton to make sure only one copy of the mod
+    # is running.
+    import singleton
+    me = singleton.SingleInstance()
+
+# This python statement checks that 'audio.rpa', 'fonts.rpa' and 'images.rpa'
+# are in the game folder and if the project is in a cloud folder (OneDrive).
+# Note: For building a mod for PC/Android, you must keep the DDLC RPAs 
+# and decompile them for the builds to work.
+init -100 python:
+    if not renpy.android:
+        for archive in ['audio','images','fonts']:
+            if archive not in config.archives:
+                raise DDLCRPAsMissing(archive)
+
+        if renpy.windows:
+            onedrive_path = os.environ.get("OneDrive", None)
+            if onedrive_path is not None and onedrive_path in config.basedir:
+                raise IllegalModLocation
+
+    # Limits the engine to only use one save location (user savedir)
+    # See init function of savelocation.py in Ren'Py.
+    if not config.developer and len(renpy.loadsave.location.locations) > 1:
+        renpy.loadsave.location.locations = renpy.loadsave.location.locations[:1]
+
 # This init python statement sets up Python functions
 # for the game.
 init python:
@@ -34,6 +60,11 @@ init python:
             im.matrix.desaturate() * im.matrix.colorize(blackCol, whiteCol)
         )
 
+    def set_allow_skipping(allow):
+        allow_skipping = allow
+        config.allow_skipping = allow
+        return allow
+
 ## Music
 # This section declares the music available to be played in the mod.
 # Syntax:
@@ -63,6 +94,12 @@ image splash = "bg/splash.png"
 # To define a new image, declare a new image statement like in this example:
 #     image sayori 1ca = Composite((960, 960), (0, 0), "mod_assets/sayori/1cl.png", (0, 0), "mod_assets/sayori/1cr.png", (0, 0), "sayori/a.png")
 
+
+# Names of the Characters
+# To define a default name make a character name variable like in this example:
+#   default e_name = "Eileen"
+
+
 ## Character Variables
 # This is where the characters are declared in the mod.
 # To define a new character with assets, declare a character variable like in this example:
@@ -82,11 +119,14 @@ define mc = DynamicCharacter('player', what_prefix='"', what_suffix='"', ctc="ct
 #   default cookies = False
 # To make sure a variable is set to a given condition use 'define' rather than 'default'.
 
+## This sets the first run variable to False to show the disclaimer.
+default persistent.first_run = False
+## This sets the persistent to false in order to choose a language.
+default persistent.has_chosen_language = False
+
 default persistent.playername = ""
 default player = persistent.playername
 
-default chapter = 0
+define allow_skipping = True
 
-# Names of the Characters
-# To define a default name make a character name variable like in this example:
-#   default e_name = "Eileen"
+default chapter = 0
