@@ -610,11 +610,6 @@ style main_menu_title:
 ## screen is intended to be used with one or more children, which are
 ## transcluded (placed) inside it.
 
-screen game_menu_m():
-    $ persistent.menu_bg_m = True
-    add "gui/menu_bg_m.png"
-    timer 0.3 action Hide("game_menu_m")
-
 screen game_menu(title, scroll=None):
 
     # Add the backgrounds.

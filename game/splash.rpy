@@ -87,82 +87,6 @@ image menu_fade:
     "white"
     menu_fadeout
 
-# These images show each respective characters' menu sprite and positions/animations.
-image menu_art_y:
-    subpixel True
-    "gui/menu_art_y.png"
-    xcenter 600
-    ycenter 335
-    zoom 0.60
-    menu_art_move(0.54, 600, 0.60)
-
-image menu_art_n:
-    subpixel True
-    "gui/menu_art_n.png"
-    xcenter 750
-    ycenter 385
-    zoom 0.58
-    menu_art_move(0.58, 750, 0.58)
-
-image menu_art_s:
-    subpixel True
-    "gui/menu_art_s.png"
-    xcenter 510
-    ycenter 500
-    zoom 0.68
-    menu_art_move(0.68, 510, 0.68)
-
-image menu_art_m:
-    subpixel True
-    "gui/menu_art_m.png"
-    xcenter 1000
-    ycenter 640
-    zoom 1.00
-    menu_art_move(1.00, 1000, 1.00)
-
-# These images are the same as above but ghost themed for the secret ghost menu
-# that appears rarely in-game .
-image menu_art_y_ghost:
-    subpixel True
-    "gui/menu_art_y_ghost.png"
-    xcenter 600
-    ycenter 335
-    zoom 0.60
-    menu_art_move(0.54, 600, 0.60)
-
-image menu_art_n_ghost:
-    subpixel True
-    "gui/menu_art_n_ghost.png"
-    xcenter 750
-    ycenter 385
-    zoom 0.58
-    menu_art_move(0.58, 750, 0.58)
-
-image menu_art_s_ghost:
-    subpixel True
-    "gui/menu_art_s_ghost.png"
-    xcenter 510
-    ycenter 500
-    zoom 0.68
-    menu_art_move(0.68, 510, 0.68)
-
-image menu_art_m_ghost:
-    subpixel True
-    "gui/menu_art_m_ghost.png"
-    xcenter 1000
-    ycenter 640
-    zoom 1.00
-    menu_art_move(1.00, 1000, 1.00)
-
-# This image sprite shows a glitched Sayori menu sprite after Act 1 finishes.
-image menu_art_s_glitch:
-    subpixel True
-    "gui/menu_art_s_break.png"
-    xcenter 470
-    ycenter 600
-    zoom 0.68
-    menu_art_move(.8, 470, .8)
-
 # This image shows the main menu screen in the main/pause menu.
 image menu_nav:
     "gui/overlay/main_menu.png"
@@ -351,21 +275,9 @@ label warningscreen:
 
 ## This label checks if the save loaded matches the anti-cheat stored in the save.
 label after_load:
-    $ restore_all_characters()
     $ config.allow_skipping = allow_skipping
     $ _dismiss_pause = config.developer
-    $ persistent.ghost_menu = False
     $ style.say_dialogue = style.normal
-
-    ## use a 'elif' here than 'if' if you uncommented the code above.
-    ## This statement checks if the anticheat number is equal to the 
-    ## anticheat number in the save file, else it errors out.
-    if anticheat != persistent.anticheat:
-        stop music
-        scene black
-        "The save file could not be loaded."
-        "Are you trying to cheat?"
-        $ renpy.utter_restart()
     return
 
 ## This label sets the main menu music to Doki Doki Literature Club before the
