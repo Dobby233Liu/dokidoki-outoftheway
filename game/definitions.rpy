@@ -26,8 +26,13 @@ init python:
         recolorize("gui/menu_bg.png", "#bdfdff", "#e6ffff", 1.25)
     """
     def recolorize(path, blackCol="#ffbde1", whiteCol="#ffe6f4", contr=1.29):
-        return im.MatrixColor(im.MatrixColor(im.MatrixColor(path, im.matrix.desaturate() * im.matrix.contrast(contr)), 
-            im.matrix.colorize("#00f", "#fff") * im.matrix.saturation(120)), im.matrix.desaturate() * im.matrix.colorize(blackCol, whiteCol))
+        return im.MatrixColor(
+            im.MatrixColor(
+                im.MatrixColor(path, im.matrix.desaturate() * im.matrix.contrast(contr)),
+                im.matrix.colorize("#00f", "#fff") * im.matrix.saturation(120)
+            ),
+            im.matrix.desaturate() * im.matrix.colorize(blackCol, whiteCol)
+        )
 
 ## Music
 # This section declares the music available to be played in the mod.
