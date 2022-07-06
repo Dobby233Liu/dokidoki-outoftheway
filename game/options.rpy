@@ -103,8 +103,6 @@ define config.rollback_enabled = config.developer
 # These variables controls the layers placement of screens, images, and more. 
 # It is highly recommended to leave these variables alone.
 define config.layers = [ 'master', 'transient', 'screens', 'overlay', 'front' ]
-define config.image_cache_size = 64
-define config.predict_statements = 50
 define config.menu_clear_layers = ["front"]
 define config.gl_test_image = "white"
 
