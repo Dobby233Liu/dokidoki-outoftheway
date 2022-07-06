@@ -139,6 +139,18 @@ define mc = DynamicCharacter('player', what_prefix='"', what_suffix='"', ctc="ct
 #   default cookies = False
 # To make sure a variable is set to a given condition use 'define' rather than 'default'.
 
+# This variable determines whether to allow the player to dismiss pauses.
+# By default this is set by config.developer which is normally set to false
+# once you packaged your mod.
+define _dismiss_pause = config.developer
+
+default _windows_hidden = False
+
+# Copy of config.allow_skipping for the setting to persist
+# through saves.
+# Use the set_allow_skipping function to change both.
+default allow_skipping = True
+
 ## Whether the player has seen the disclaimer or not.
 default persistent.first_run = False
 ## Whether the player has seen the language choice screen or not.
@@ -148,25 +160,12 @@ default persistent.has_chosen_language = False
 default persistent.playername = ""
 default player = persistent.playername
 
-# This variable determines whether to allow the player to dismiss pauses.
-# By default this is set by config.developer which is normally set to false
-# once you packaged your mod.
-define _dismiss_pause = config.developer
-
-# Copy of config.allow_skipping for the setting to persist
-# through saves.
-# Use the set_allow_skipping function to change both.
-default allow_skipping = True
-
 # Chapter variable for use in the mod.
 default chapter = 0
 
 # This init python statement sets up Python functions
 # for the game.
 init python:
-    global _windows_hidden
-    _windows_hidden = False
-
     """
     This function gets the postition of the music playing in a given channel.
     """
