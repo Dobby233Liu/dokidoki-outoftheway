@@ -5,12 +5,6 @@
 
 label start:
 
-    # This label configures the anticheat number for the game after Act 1.
-    # It is recommended to leave this as-is and use the following in your script:
-    #   $ persistent.anticheat = renpy.random.randint(X, Y) 
-    #   X - The minimum number | Y - The maximum number
-    $ anticheat = persistent.anticheat
-
     # This variable sets the chapter number to 0 to use in the mod.
     $ chapter = 0
 
@@ -26,13 +20,7 @@ label start:
     # This variable controls whether the quick menu in the textbox is enabled.
     $ quick_menu = True
 
-    # This variable c ontrols whether we want normal or glitched dialogue
-    # For glitched dialogue, use 'style.edited'.
     $ style.say_dialogue = style.normal
-
-    # This variable controls whether Sayori is dead. It is recommended to leave
-    # this as-is.
-    $ in_sayori_kill = None
     
     # These variables controls whether the player can skip dialogue or transitions.
     $ allow_skipping = True

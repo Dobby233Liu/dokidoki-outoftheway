@@ -45,20 +45,6 @@ style default:
     line_overlap_split 1
     line_spacing 1
 
-style default_monika is normal:
-    slow_cps 30
-
-style edited is default:
-    font "gui/font/VerilySerifMono.otf"
-    kerning 8
-    outlines [(10, "#000", 0, 0)]
-    xpos gui.text_xpos
-    xanchor gui.text_xalign
-    xsize gui.text_width
-    ypos gui.text_ypos
-    text_align gui.text_xalign
-    layout ("subtitle" if gui.text_xalign else "tex")
-
 style normal is default:
     xpos gui.text_xpos
     xanchor gui.text_xalign
@@ -82,16 +68,6 @@ style splash_text:
     font gui.default_font
     text_align 0.5
     outlines []
-
-style poemgame_text:
-    yalign 0.5
-    font "gui/font/Halogen.ttf"
-    size 30
-    color "#000"
-    outlines []
-
-    hover_xoffset -3
-    hover_outlines [(3, "#fef", 0, 0), (2, "#fcf", 0, 0), (1, "#faf", 0, 0)]
 
 style gui_text:
     font gui.interface_font
@@ -153,7 +129,6 @@ style vslider:
 style frame:
     padding gui.frame_borders.padding
     background Frame("gui/frame.png", gui.frame_borders, tile=gui.frame_tile)
-    # background Frame(recolorize("gui/frame.png"), gui.frame_borders, tile=gui.frame_tile)
 
 ################################################################################
 ## In-game screens
@@ -211,9 +186,6 @@ style window:
     ysize gui.textbox_height
 
     background Transform("gui/textbox.png", xalign=0.5, yalign=1.0)
-
-style window_monika is window:
-    background Transform("gui/textbox_monika.png", xalign=0.5, yalign=1.0)
 
 style namebox:
     xpos gui.name_xpos
@@ -695,7 +667,6 @@ style game_menu_outer_frame:
     top_padding 120
 
     background "gui/overlay/game_menu.png"
-    # background recolorize("gui/overlay/game_menu.png")
 
 style game_menu_navigation_frame:
     xsize 280
@@ -1312,7 +1283,6 @@ style confirm_button_text is gui_medium_button_text
 
 style confirm_frame:
     background Frame("gui/frame.png", gui.confirm_frame_borders, tile=gui.frame_tile)
-    # background Frame(recolorize("gui/frame.png"), gui.confirm_frame_borders, tile=gui.frame_tile)
     padding gui.confirm_frame_borders.padding
     xalign .5
     yalign .5

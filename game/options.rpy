@@ -23,7 +23,6 @@ define gui.about = _("")
 # in the Ren'Py Launcher or DDMM (Doki Doki Mod Maker).
 # Note:
 #   The build name is ASCII only so no numbers, spaces, or semicolons.
-#   Example: Doki Doki Yuri Time to DokiDokiYuriTime
 define build.name = "DDLCModTemplateTwo-Py3"
 
 # This configures whether your mod has sound effects.

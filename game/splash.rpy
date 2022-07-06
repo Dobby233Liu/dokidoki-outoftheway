@@ -24,12 +24,6 @@ init python:
     # This variable is the default splash message that people will see when
     # the game launches.
     splash_message_default = "This game is an unofficial fan game that is unaffiliated with Team Salvato."
-    # This array variable stores different kinds of splash messages you can use
-    # to show to the player on startup.
-    splash_messages = [
-        "Please support Doki Doki Literature Club.",
-        "Monika is watching you code."
-    ]
 
     ### New in 3.0.0
     ## This recolor function allows you to recolor the GUI of DDLC easily without replacing
@@ -40,17 +34,6 @@ init python:
     def recolorize(path, blackCol="#ffbde1", whiteCol="#ffe6f4", contr=1.29):
         return im.MatrixColor(im.MatrixColor(im.MatrixColor(path, im.matrix.desaturate() * im.matrix.contrast(contr)), 
             im.matrix.colorize("#00f", "#fff") * im.matrix.saturation(120)), im.matrix.desaturate() * im.matrix.colorize(blackCol, whiteCol))
-
-    def process_check(stream_list):
-        if not renpy.windows:
-            for index, process in enumerate(stream_list):
-                stream_list[index] = process.replace(".exe", "")
-        
-        for x in stream_list:
-            for y in process_list:
-                if re.match(r"^" + x + r"\b", y):
-                    return True
-        return False
 
 # This image text shows the splash message when the game loads.
 image splash_warning = ParameterizedText(style="splash_text", xalign=0.5, yalign=0.5)
@@ -72,14 +55,12 @@ image menu_logo:
 image menu_bg:
     topleft
     "gui/menu_bg.png"
-    # recolorize("gui/menu_bg.png", "#ffdbf0", "#fff", 1)
     menu_bg_move
 
 # This image shows the pause menu polka-dot image.
 image game_menu_bg:
     topleft
     "gui/menu_bg.png"
-    # recolorize("gui/menu_bg.png", "#ffdbf0", "#fff", 1)
     menu_bg_loop
 
 # This image transform shows the white fading effect in the main menu.
@@ -90,7 +71,6 @@ image menu_fade:
 # This image shows the main menu screen in the main/pause menu.
 image menu_nav:
     "gui/overlay/main_menu.png"
-    #recolorize("gui/overlay/main_menu.png", "#ffbde1")
     menu_nav_move
 
 ## Main Menu Effects
@@ -253,12 +233,10 @@ label splashscreen:
 
     show white
     $ splash_message = splash_message_default
-    $ config.main_menu_music = audio.t1
     $ renpy.music.play(config.main_menu_music)
     show intro with Dissolve(0.5, alpha=True)
     $ pause(2.5)
     hide intro with Dissolve(0.5, alpha=True)
-    $ splash_message = renpy.random.choice(splash_messages)
     show splash_warning "[splash_message]" with Dissolve(0.5, alpha=True)
     $ pause(1.5)
     hide splash_warning with Dissolve(0.5, alpha=True)
@@ -278,10 +256,4 @@ label after_load:
     $ config.allow_skipping = allow_skipping
     $ _dismiss_pause = config.developer
     $ style.say_dialogue = style.normal
-    return
-
-## This label sets the main menu music to Doki Doki Literature Club before the
-## menu starts.
-label before_main_menu:
-    $ config.main_menu_music = audio.t1
     return

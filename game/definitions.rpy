@@ -66,7 +66,7 @@ image splash = "bg/splash.png"
 # To define a new character with assets, declare a character variable like in this example:
 #   define e = DynamicCharacter('e_name', image='eileen', what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed")
 # To define a new character without assets, declare a character variable like this instead:
-#   define en = Character('Eileen & Nat', what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed")
+#   define en = Character('Also eileen lmao', what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed")
 
 define narrator = Character(ctc="ctc", ctc_position="fixed")
 define mc = DynamicCharacter('player', what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed")
