@@ -23,7 +23,6 @@ label start:
     $ style.say_dialogue = style.normal
     
     # These variables controls whether the player can skip dialogue or transitions.
-    $ allow_skipping = True
     $ config.allow_skipping = True
 
     ## The Main Part of the Script

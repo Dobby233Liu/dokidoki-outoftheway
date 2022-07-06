@@ -1,8 +1,9 @@
-init python:
-    # Limits the engine to only use one save location (user savedir)
-    # See init function of savelocation.py in Ren'Py.
-    if not config.developer and len(renpy.loadsave.location.locations) > 1:
-        renpy.loadsave.location.locations = renpy.loadsave.location.locations[:1]
+
+python early:
+    # This starts singleton to make sure only one copy of the mod
+    # is running.
+    import singleton
+    me = singleton.SingleInstance()
 
 # This python statement checks that 'audio.rpa', 'fonts.rpa' and 'images.rpa'
 # are in the game folder and if the project is in a cloud folder (OneDrive).
@@ -15,7 +16,11 @@ init -100 python:
                 raise DDLCRPAsMissing(archive)
 
         if renpy.windows:
-            onedrive_path = os.environ.get("OneDrive")
-            if onedrive_path is not None:
-                if onedrive_path in config.basedir:
-                    raise IllegalModLocation
+            onedrive_path = os.environ.get("OneDrive", None)
+            if onedrive_path is not None and onedrive_path in config.basedir:
+                raise IllegalModLocation
+
+    # Limits the engine to only use one save location (user savedir)
+    # See init function of savelocation.py in Ren'Py.
+    if not config.developer and len(renpy.loadsave.location.locations) > 1:
+        renpy.loadsave.location.locations = renpy.loadsave.location.locations[:1]

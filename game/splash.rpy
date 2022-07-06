@@ -2,23 +2,6 @@
 
 # This is where the splashscreen, disclaimer and menu code reside in.
 
-## Splash Message
-# This python statement is where the splash messages reside in.
-init python:
-    # This variable is the default splash message that people will see when
-    # the game launches.
-    splash_message_default = "This game is an unofficial fan game that is unaffiliated with Team Salvato."
-
-    ### New in 3.0.0
-    ## This recolor function allows you to recolor the GUI of DDLC easily without replacing
-    ## the in-game assets.
-    ##
-    ## Syntax to use: recolorize("path/to/your/image", "#color1hex", "#color2hex", contrast value)
-    ## Example: recolorize("gui/menu_bg.png", "#bdfdff", "#e6ffff", 1.25)
-    def recolorize(path, blackCol="#ffbde1", whiteCol="#ffe6f4", contr=1.29):
-        return im.MatrixColor(im.MatrixColor(im.MatrixColor(path, im.matrix.desaturate() * im.matrix.contrast(contr)), 
-            im.matrix.colorize("#00f", "#fff") * im.matrix.saturation(120)), im.matrix.desaturate() * im.matrix.colorize(blackCol, whiteCol))
-
 # This image text shows the splash message when the game loads.
 image splash_warning = ParameterizedText(style="splash_text", xalign=0.5, yalign=0.5)
 
@@ -208,24 +191,21 @@ label splashscreen:
         pause 1.0
         scene white
 
-    ## This variable makes sure the path of the base directory is Linux/macOS/Unix 
-    ## based than Windows as Python/Ren'Py prefers this placement.
-    $ basedir = config.basedir.replace('\\', '/')
-
     ## This variable sets skipping to False for the splash screen.
     $ config.allow_skipping = False
 
     show white
-    $ splash_message = splash_message_default
     $ renpy.music.play(config.main_menu_music)
     show intro with Dissolve(0.5, alpha=True)
     $ pause(2.5)
     hide intro with Dissolve(0.5, alpha=True)
-    show splash_warning "[splash_message]" with Dissolve(0.5, alpha=True)
+    show splash_warning _("This game is an unofficial fan game that is unaffiliated with Team Salvato.") with Dissolve(0.5, alpha=True)
     $ pause(1.5)
     hide splash_warning with Dissolve(0.5, alpha=True)
     $ pause(0.5)
+
     $ config.allow_skipping = True
+
     return
 
 ## This label is a left-over from DDLC's development that hides the Team Salvato

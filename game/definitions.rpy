@@ -2,24 +2,11 @@
 
 # This file defines important stuff for DDLC and your mod!
 
-# This variable declares whether Developer Mode is on or off in the mod.
-define config.developer = False
-
-# This python statement starts singleton to make sure only one copy of the mod
-# is running.
-python early:
-    import singleton
-    me = singleton.SingleInstance()
-
-# This init python statement sets up the functions, keymaps and channels
+# This init python statement sets up Python functions
 # for the game.
 init python:
-    # These variable declarations adjusts the mapping for certain actions in-game.
-    config.keymap['game_menu'].remove('mouseup_3')
-    config.keymap['hide_windows'].append('mouseup_3')
-    config.keymap['self_voicing'] = []
-    config.keymap['clipboard_voicing'] = []
-    config.keymap['toggle_skip'] = []
+    global _windows_hidden
+    _windows_hidden = False
 
     """
     This function gets the postition of the music playing in a given channel.
@@ -29,8 +16,18 @@ init python:
         if pos: return pos
         return 0
 
-    global _windows_hidden
-    _windows_hidden = False
+    """
+    This recolor function allows you to recolor the GUI of DDLC easily without replacing
+    the in-game assets. Introduced in version 3.0.0 of the mod template.
+
+    Syntax to use:
+        recolorize("path/to/your/image", "#color1hex", "#color2hex", contrast value)
+    Example:
+        recolorize("gui/menu_bg.png", "#bdfdff", "#e6ffff", 1.25)
+    """
+    def recolorize(path, blackCol="#ffbde1", whiteCol="#ffe6f4", contr=1.29):
+        return im.MatrixColor(im.MatrixColor(im.MatrixColor(path, im.matrix.desaturate() * im.matrix.contrast(contr)), 
+            im.matrix.colorize("#00f", "#fff") * im.matrix.saturation(120)), im.matrix.desaturate() * im.matrix.colorize(blackCol, whiteCol))
 
 ## Music
 # This section declares the music available to be played in the mod.
@@ -71,11 +68,6 @@ image splash = "bg/splash.png"
 define narrator = Character(ctc="ctc", ctc_position="fixed")
 define mc = DynamicCharacter('player', what_prefix='"', what_suffix='"', ctc="ctc", ctc_position="fixed")
 
-# This variable determines whether to allow the player to dismiss pauses.
-# By default this is set by config.developer which is normally set to false
-# once you packaged your mod.
-define _dismiss_pause = config.developer
-
 ## Variables
 # This section declares variables when the mod runs for the first time on all saves.
 # To make a new persistent variable, make a new variable with the 'persistent.' in it's name
@@ -88,9 +80,6 @@ define _dismiss_pause = config.developer
 default persistent.playername = ""
 default player = persistent.playername
 
-define config.mouse = None
-default allow_skipping = True
-default basedir = config.basedir
 default chapter = 0
 
 # Names of the Characters

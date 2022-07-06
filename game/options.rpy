@@ -91,8 +91,18 @@ define config.autosave_on_quit = False
 # This controls the number of slots auto-save can use for saving the game.
 define config.autosave_slots = 0
 
+# This variable declares whether Developer Mode is on or off in the mod.
+define config.developer = False
+
 # This controls whether the player can rollback to the previous dialogue in-game.
 define config.rollback_enabled = config.developer
+
+# This variable determines whether to allow the player to dismiss pauses.
+# By default this is set by config.developer which is normally set to false
+# once you packaged your mod.
+define _dismiss_pause = config.developer
+
+define config.mouse = None
 
 # These variables controls the layers placement of screens, images, and more. 
 # It is highly recommended to leave these variables alone.
@@ -103,6 +113,13 @@ define config.gl_test_image = "white"
 define config.atl_start_on_show = False
 
 init python:
+    # This adjusts the key mapping for certain actions in-game.
+    config.keymap['game_menu'].remove('mouseup_3')
+    config.keymap['hide_windows'].append('mouseup_3')
+    config.keymap['self_voicing'] = []
+    config.keymap['clipboard_voicing'] = []
+    config.keymap['toggle_skip'] = []
+
     # Replaces '--' or ' - ' in spoken dialogue
     # to U+2014 EM DASH.
     def replace_text(s):

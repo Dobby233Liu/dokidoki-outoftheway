@@ -381,12 +381,6 @@ screen quick_menu():
             #textbutton _("Q.Load") action QuickLoad()
             textbutton _("Settings") action ShowMenu('preferences')
 
-
-## This code ensures that the quick_menu screen is displayed in-game, whenever
-## the player has not explicitly hidden the interface.
-#init python:
-#    config.overlay_screens.append("quick_menu")
-
 default quick_menu = True
 
 #style quick_button is default
@@ -409,6 +403,18 @@ style quick_button_text:
 ##
 ## This screen is included in the main and game menus, and provides navigation
 ## to other menus, and to start the game.
+
+init python:
+    # Logic:
+    # name input screen sets player variable ->
+    # ok pressed ->
+    # calls this
+    def FinishEnterName():
+        if not player: return
+        persistent.playername = player
+        renpy.save_persistent()
+        renpy.hide_screen("name_input")
+        renpy.jump_out_of_context("start")
 
 screen navigation():
 
@@ -489,18 +495,6 @@ screen name_input(message, ok_action):
                 spacing 100
 
                 textbutton _("OK") action ok_action
-
-init python:
-    # Logic:
-    # name input screen sets player variable ->
-    # ok pressed ->
-    # calls this
-    def FinishEnterName():
-        if not player: return
-        persistent.playername = player
-        renpy.save_persistent()
-        renpy.hide_screen("name_input")
-        renpy.jump_out_of_context("start")
 
 
 ## Main Menu screen ############################################################
