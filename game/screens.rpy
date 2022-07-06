@@ -508,6 +508,8 @@ screen main_menu():
 
     style_prefix "main_menu"
 
+    add "menu_bg"
+
     frame
 
     ## The use statement includes another screen inside this one. The actual

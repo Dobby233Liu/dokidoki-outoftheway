@@ -92,7 +92,7 @@ define config.autosave_on_quit = False
 define config.autosave_slots = 0
 
 # This variable declares whether Developer Mode is on or off in the mod.
-define config.developer = False
+define config.developer = True
 
 # This controls whether the player can rollback to the previous dialogue in-game.
 define config.rollback_enabled = config.developer

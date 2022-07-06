@@ -5,6 +5,8 @@
 # and also defines some CDSes
 
 python early:
+    import math
+
     # For Credits
     import datetime
 
@@ -30,13 +32,14 @@ python early:
         return lexer.float()
 
     def execute_pause_mine(time):
+        time = time and float(time) or None
         if not time:
             _windows_hidden = True
             renpy.ui.saybehavior(afm=" ")
             renpy.ui.interact(mouse='pause', type='pause', roll_forward=None)
             _windows_hidden = False
             return
-        if time <= 0: return
+        if time <= 0.0: return
         _windows_hidden = True
         renpy.pause(time)
         _windows_hidden = False

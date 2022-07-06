@@ -27,4 +27,7 @@ label start:
 
     ## The Main Part of the Script
 
+    "Nothing here, move along."
+    pausem
+
     return

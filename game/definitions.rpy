@@ -51,6 +51,97 @@ image black = "#000000"
 image white = "#ffffff"
 image splash = "bg/splash.png"
 
+## Main Menu Images
+# These image transforms store the images and positions of the game logo,
+# the menu character sprites and main menu/pause menu screen images.
+
+# This image shows the DDLC logo in the normal DDLC position.
+image menu_logo:
+    "mod_assets/DDLCModTemplateLogo.png"
+    subpixel True
+    xcenter 240
+    ycenter 120
+    zoom 0.60
+    menu_logo_move
+
+# This image shows the main menu polka-dot image.
+image menu_bg:
+    topleft
+    "gui/menu_bg.png"
+    menu_bg_move
+
+# This image shows the pause menu polka-dot image.
+image game_menu_bg:
+    topleft
+    "gui/menu_bg.png"
+    menu_bg_loop
+
+# This image transform shows the white fading effect in the main menu.
+image menu_fade:
+    "white"
+    menu_fadeout
+
+# This image shows the main menu screen in the main/pause menu.
+image menu_nav:
+    "gui/overlay/main_menu.png"
+    menu_nav_move
+
+## Main Menu Effects
+# These transforms and image transform store the effects that appear in the
+# main menu on startup.
+
+# This image transform shows a particle burst effect image to the main menu when
+# the game starts.
+image menu_particles:
+    2.481
+    xpos 224
+    ypos 104
+    ParticleBurst("gui/menu_particle.png", explode_time=0, particles_num=40, total_time=2.0, x_speed=3, y_speed=3).sm
+    particle_fadeout
+
+# This transform fades out the particle effects of the main menu
+transform particle_fadeout:
+    easeout 1.5 alpha 0
+
+# This transform moves the polka-dot menu background to the upper-left.
+transform menu_bg_move:
+    subpixel True
+    topleft
+    parallel:
+        xoffset 0 yoffset 0
+        linear 3.0 xoffset -100 yoffset -100
+        repeat
+
+# This transform loops the polka-dot moving effect.
+transform menu_bg_loop:
+    subpixel True
+    topleft
+    parallel:
+        xoffset 0 yoffset 0
+        linear 3.0 xoffset -100 yoffset -100
+        repeat
+
+# This transform moves the menu logo down to it's intended placement in-game.
+transform menu_logo_move:
+    subpixel True
+    yoffset -300
+    time 1.925
+    easein_bounce 1.5 yoffset 0
+
+# This transform moves the main menu screen in-game to be visible.
+transform menu_nav_move:
+    subpixel True
+    xoffset -500
+    time 1.5
+    easein_quint 1 xoffset 0
+
+# This transform fades out the main menu screen. 
+transform menu_fadeout:
+    easeout 0.75 alpha 0
+    time 2.481
+    alpha 0.4
+    linear 0.5 alpha 0
+
 # Characters Images
 # This is where the characters bodies and faces are defined in the mod.
 # They are defined by a left half, a right half and their head.
