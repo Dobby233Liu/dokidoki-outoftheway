@@ -16,31 +16,31 @@ define config.version = "4.0.0–Py3"
 # The build name is ASCII only so no numbers, spaces, or semicolons.
 define build.name = "DDLCModTemplateTwo-Py3"
 
-# Shows the sound volume slider.
-define config.has_sound = True
-
-# Shows the music volume slider.
+# Whether to show the music volume slider or not.
 define config.has_music = True
 
-# Shows the voice volume slider.
+# Whether to show the sound volume slider or not.
+define config.has_sound = True
+
+# Whether to show the voice volume slider or not.
 define config.has_voice = True
 
-# This configures what music will play when you launch your mod and in the 
+# This configures the music will play when you launch your mod and in the 
 # main menu.
 define config.main_menu_music = audio.t1
 
-# These variables control the transition effects of DDLC when entering and exiting
+# This configures the transition effects when entering and exiting
 # a menu.
 #   config.enter_transition controls the effect seen when entering the game menu.
 #   config.exit_transition controls the effect when returning to the game.
-#   Dissolve(X) dissolves the menu or last screen by X seconds.
+#   Dissolve(X) dissolves the menu or the last screen by X seconds.
 define config.enter_transition = Dissolve(.2)
 define config.exit_transition = Dissolve(.2)
 
-# This controls the transition effect of DDLC after loading the game.
+# The transition effect after loading the game.
 define config.after_load_transition = None
 
-# This controls the transition effect when your mod has reached the end of its' story.
+# The transition effect when your mod has reached the end of its' story.
 define config.end_game_transition = Dissolve(.5)
 
 # This controls the textbox that the characters use to speak.
@@ -96,11 +96,6 @@ define config.developer = True
 
 # This controls whether the player can rollback to the previous dialogue in-game.
 define config.rollback_enabled = config.developer
-
-# This variable determines whether to allow the player to dismiss pauses.
-# By default this is set by config.developer which is normally set to false
-# once you packaged your mod.
-define _dismiss_pause = config.developer
 
 define config.mouse = None
 
