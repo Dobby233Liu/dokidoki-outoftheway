@@ -1,8 +1,10 @@
 ## effects.rpy
 
-# This file defines all the effects in this game
+# This file defines all the effects in this game.
 
 init python:
+
+    # Particle effect used in the main menu.
     class ParticleBurst(object):
         def __init__(self, displayable, explode_time=0, particles_num=20, total_time=0.5, x_speed=3, y_speed=5):
             self.sm = SpriteManager(update=self.update)

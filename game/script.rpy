@@ -1,11 +1,10 @@
 ## script.rpy
 
-# This is the main script that Ren'Py calls upon to start
-# your mod's story! 
-
+# This is the label that Ren'Py calls to start
+# your mod's story!
 label start:
 
-    # This variable sets the chapter number to 0 to use in the mod.
+    # This variable sets the chapter to 0 to use in the mod.
     $ chapter = 0
 
     # This variable controls whether the player can dismiss a pause in-game.

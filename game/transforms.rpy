@@ -2,7 +2,9 @@
 
 # This file defines the placements and animations in DDLC.
 
-# Main Menu
+## Main Menu Effects
+# These transforms are the effects that appear in the
+# main menu.
 
 # This transform fades out the particle effects of the main menu
 transform particle_fadeout:

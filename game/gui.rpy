@@ -4,7 +4,7 @@
 # interface.
 
 ## NOTE: To configure settings for Android, scroll down to the init python block
-## on line 379
+## on line 360
 
 init -2 python:
     # This sets the game's resolution to 1280x720.

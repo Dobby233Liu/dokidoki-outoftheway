@@ -1,19 +1,16 @@
 # 01definitions.rpy
 # This file contains the definitions for some exceptions
 # and imports certain Python modules at runtime
-# and also defines some CDSes
+# and also defines some Creator Defined Statements
 
 python early:
     # For effects
     import math
 
-    # For Credits
+    # For credits
     import datetime
 
-    # For Glitchtext
-    import random
-
-    # For Splash
+    # For path detection
     import os
     
     class DDLCRPAsMissing(Exception):
@@ -48,6 +45,8 @@ python early:
         if not isinstance(time, float):
             renpy.error(tte)
 
+    # With my edits you can now use pausem x.x
+    # in place of $ pause(x.x) lmao
     renpy.register_statement(
         "pausem",
         parse=parse_pause_mine,

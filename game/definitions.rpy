@@ -68,14 +68,10 @@ image splash_warning = ParameterizedText(style="splash_text", xalign=0.5, yalign
 # These image transforms store the images and positions of the game logo,
 # the menu character sprites and main menu/pause menu screen images.
 
-# This image shows the DDLC logo in the normal DDLC position.
-image menu_logo:
-    "mod_assets/DDLCModTemplateLogo.png"
-    subpixel True
-    xcenter 240
-    ycenter 120
-    zoom 0.60
-    menu_logo_move
+# This image transform shows the white fading effect in the main menu.
+image menu_fade:
+    "white"
+    menu_fadeout
 
 # This image shows the main menu polka-dot image.
 image menu_bg:
@@ -89,19 +85,19 @@ image game_menu_bg:
     "gui/menu_bg.png"
     menu_bg_loop
 
-# This image transform shows the white fading effect in the main menu.
-image menu_fade:
-    "white"
-    menu_fadeout
-
 # This image shows the main menu screen in the main/pause menu.
 image menu_nav:
     "gui/overlay/main_menu.png"
     menu_nav_move
 
-## Main Menu Effects
-# These transforms and image transform store the effects that appear in the
-# main menu on startup.
+# This image shows the DDLC logo in the normal DDLC position.
+image menu_logo:
+    "mod_assets/DDLCModTemplateLogo.png"
+    subpixel True
+    xcenter 240
+    ycenter 120
+    zoom 0.60
+    menu_logo_move
 
 # This image transform shows a particle burst effect image to the main menu when
 # the game starts.
@@ -173,18 +169,18 @@ init python:
     This recolor function allows you to recolor the GUI of DDLC easily without replacing
     the in-game assets. Introduced in version 3.0.0 of the mod template.
 
-    Syntax to use:
+    Syntax:
         recolorize("path/to/your/image", "#color1hex", "#color2hex", contrast value)
     Example:
         recolorize("gui/menu_bg.png", "#bdfdff", "#e6ffff", 1.25)
     """
-    def recolorize(path, blackCol="#ffbde1", whiteCol="#ffe6f4", contr=1.29):
+    def recolorize(path, black="#ffbde1", white="#ffe6f4", contrast=1.29):
         return im.MatrixColor(
             im.MatrixColor(
-                im.MatrixColor(path, im.matrix.desaturate() * im.matrix.contrast(contr)),
+                im.MatrixColor(path, im.matrix.desaturate() * im.matrix.contrast(contrast)),
                 im.matrix.colorize("#00f", "#fff") * im.matrix.saturation(120)
             ),
-            im.matrix.desaturate() * im.matrix.colorize(blackCol, whiteCol)
+            im.matrix.desaturate() * im.matrix.colorize(black, white)
         )
 
     def set_allow_skipping(allow):

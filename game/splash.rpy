@@ -1,6 +1,6 @@
 ## splash.rpy
 
-# This is where the splashscreen, disclaimer and menu code reside in.
+# This is where the disclaimer and the splash screen reside in.
 
 ## The disclaimer screen that appears when the game starts.
 label splashscreen:
