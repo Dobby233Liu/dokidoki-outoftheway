@@ -306,8 +306,8 @@ screen choice(items):
                     $ arg2 = kwarg[-1]
                     
                     textbutton caption:
-                        idle_background recolorize("gui/button/choice_idle_background.png", blackCol=arg1, whiteCol=arg2, contr=1.29)
-                        hover_background recolorize("gui/button/choice_idle_background.png", blackCol=arg1, whiteCol="#fff", contr=1.29)
+                        idle_background recolorize("gui/button/choice_idle_background.png", black=arg1, white=arg2, contrast=1.29)
+                        hover_background recolorize("gui/button/choice_idle_background.png", black=arg1, white="#fff", contrast=1.29)
                         action i.action
 
                 else:
