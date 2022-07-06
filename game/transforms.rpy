@@ -392,16 +392,3 @@ define wipeleft_scene = MultipleTransition([
     Solid("#000"), Pause(0.25),
     Solid("#000"), ImageDissolve("images/menu/wipeleft.png", 0.5, ramplen=64),
     True])
-
-# This transform applies the rewind effect seen in Act 2.
-transform rewind:
-    truecenter
-    zoom 1.20
-    parallel:
-        easeout_bounce 0.2 xalign 0.55
-        easeout_bounce 0.2 xalign 0.45
-        repeat
-    parallel:
-        easeout_bounce 0.33 yalign 0.55
-        easeout_bounce 0.33 yalign 0.45
-        repeat
