@@ -29,7 +29,7 @@ init -100 python:
         renpy.loadsave.location.locations = renpy.loadsave.location.locations[:1]
 
 ## Music
-# This section declares the music available to be played in the mod.
+# This section declares music available to be played in the mod.
 # Syntax:
 #   audio. - This tells Ren'Py this is a audio variable.
 #   t1 - This tells Ren'Py the label of the music/sound file being declared.
@@ -139,16 +139,21 @@ define mc = DynamicCharacter('player', what_prefix='"', what_suffix='"', ctc="ct
 #   default cookies = False
 # To make sure a variable is set to a given condition use 'define' rather than 'default'.
 
-## This sets the first run variable to False to show the disclaimer.
+## Whether the player has seen the disclaimer or not.
 default persistent.first_run = False
-## This sets the persistent to false in order to choose a language.
+## Whether the player has seen the language choice screen or not.
 default persistent.has_chosen_language = False
 
+# The player's name. Persists through playthroughs.
 default persistent.playername = ""
 default player = persistent.playername
 
+# Alias of config.allow_skipping for the setting to persist
+# through saves.
+# Use the set_allow_skipping function to change both.
 define allow_skipping = True
 
+# Chapter variable for use in the mod.
 default chapter = 0
 
 # This init python statement sets up Python functions

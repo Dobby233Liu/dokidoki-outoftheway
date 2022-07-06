@@ -44,12 +44,12 @@ label disclaimer:
     ## unaffiliated with Team Salvato, requires that the player must 
     ## finish DDLC before playing, has spoilers for DDLC, and where to 
     ## get DDLC's files."
-    "[config.name] is a Doki Doki Literature Club fan mod that is not affiliated in anyway with Team Salvato."
+    "[config.name!t] is a Doki Doki Literature Club fan mod that is not affiliated in any way with Team Salvato."
     "It is designed to be played only after the official game has been completed, and contains spoilers for the official game."
-    "Game files for Doki Doki Literature Club are required to play this mod and can be downloaded for free at: https://ddlc.moe or on Steam."
+    "Game files for Doki Doki Literature Club are required to play this mod, and can be downloaded for free at {a=https://ddlc.moe}https://ddlc.moe{/a} or on Steam."
 
     menu:
-        "By playing [config.name] you agree that you have completed Doki Doki Literature Club and accept any spoilers contained within."
+        "By playing [config.name!t] you agree that you have completed Doki Doki Literature Club and accept any spoilers contained within."
         "I agree.":
             pass
 

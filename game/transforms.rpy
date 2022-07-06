@@ -350,6 +350,7 @@ define dissolve = Dissolve(0.25)
 define dissolve_cg = Dissolve(0.75)
 define dissolve_scene = Dissolve(1.0)
 
+# Dissolve effect used exclusively in the main menu.
 define dissolve_intro = Dissolve(0.5, alpha=True)
 
 # This variable makes the screen dissolve itself to black to show another scene later.
