@@ -1,10 +1,10 @@
-
 # 01definitions.rpy
 # This file contains the definitions for some exceptions
 # and imports certain Python modules at runtime
 # and also defines some CDSes
 
 python early:
+    # For effects
     import math
 
     # For Credits

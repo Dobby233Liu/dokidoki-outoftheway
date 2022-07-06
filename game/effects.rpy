@@ -29,13 +29,12 @@ init python:
             self.stars.append((s, y_speed, x_speed, self.total_time))
         
         def update(self, st):
-            sindex = 0
-            for s, y_speed, x_speed, time in self.stars:
+            for i in range(len(self.stars)):
+                star, y_speed, x_speed, time = self.stars[i]
                 if st < time:
-                    s.x = x_speed * 120 * (st + 0.2)
-                    s.y = y_speed * 120 * (st + 0.2) + (self.gravity * st * st)
+                    star.x = x_speed * 120 * (st + 0.2)
+                    star.y = y_speed * 120 * (st + 0.2) + (self.gravity * st * st)
                 else:
-                    s.destroy()
-                    self.stars.pop(sindex)
-                sindex += 1
+                    star.destroy()
+                    self.stars.pop(i)
             return 0
