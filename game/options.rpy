@@ -1,4 +1,4 @@
-﻿## This mod is based on DDLC Mod Template version 4.0.0,
+## This mod is based on DDLC Mod Template version 4.0.0,
 ## Python 3/Ren'Py 8 variant.
 # When asked to provide the version of the template you are using,
 # provide this version number.
@@ -185,9 +185,9 @@ init python:
         build.classify_renpy("renpy.py", "renpy all")
     except: pass
     try:
-        build.early_base_patterns.remove((config.name + '.sh', None))
+        build.early_base_patterns.remove((build.name + '.sh', None))
         build.classify("LinuxLauncher.sh", "linux") ## Linux Launcher Script
-        build.classify(config.name + ".sh", None)
+        build.classify(build.name + ".sh", None)
     except: pass
 
     #############################################################
