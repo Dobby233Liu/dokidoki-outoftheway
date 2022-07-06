@@ -2,7 +2,20 @@
 
 # This is where the splashscreen, disclaimer and menu code reside in.
 
-# This image text shows the splash message when the game loads.
+define dissolve_intro = Dissolve(0.5, alpha=True)
+
+## Team Salvato Splash Screen
+# This image stores the Tean Salvato logo image that appears when the game starts.
+image intro:
+    truecenter
+    "white"
+    0.5
+    "bg/splash.png" with dissolve_intro
+    2.5
+    "white" with dissolve_intro
+    0.5
+
+# Image text for the splash message when the game loads.
 image splash_warning = ParameterizedText(style="splash_text", xalign=0.5, yalign=0.5)
 
 ## Main Menu Images
@@ -114,72 +127,61 @@ transform menu_art_move(z, x, z2):
         pause 0.75
         ease 1.5 zoom z2 xoffset 0
 
-## Team Salvato Splash Screen
-# This image stores the Tean Salvato logo image that appears when the game starts.
-image intro:
-    truecenter
-    "white"
-    0.5
-    "bg/splash.png" with Dissolve(0.5, alpha=True)
-    2.5
-    "white" with Dissolve(0.5, alpha=True)
-    0.5
-
-## Startup Disclaimer
-## This label calls the disclaimer screen that appears when the game starts.
+## The disclaimer screen that appears when the game starts.
 label splashscreen:
 
+    $ quick_menu = False
+
+    $ show_choose_language = not persistent.has_chosen_language and translations
+
+    scene black
     if not persistent.first_run:
-        $ quick_menu = False
-        scene black
         pause 0.5
         with Dissolve(1.0)
         pause 1.0
 
-        ## Switch to language selector. Borrowed from Ren'Py
-        if not persistent.has_chosen_language and translations:
-            if _preferences.language is None:
-                call choose_language
-            $ persistent.has_chosen_language = True
+    ## Switch to language selector. Borrowed from Ren'Py
+    if show_choose_language:
+        if _preferences.language is None:
+            call choose_language
+        $ persistent.has_chosen_language = True
 
-        ## You can edit this message but you MUST declare that your mod is 
-        ## unaffiliated with Team Salvato, requires that the player must 
-        ## finish DDLC before playing, has spoilers for DDLC, and where to 
-        ## get DDLC's files."
-        "[config.name] is a Doki Doki Literature Club fan mod that is not affiliated in anyway with Team Salvato."
-        "It is designed to be played only after the official game has been completed, and contains spoilers for the official game."
-        "Game files for Doki Doki Literature Club are required to play this mod and can be downloaded for free at: https://ddlc.moe or on Steam."
-
-        menu:
-            "By playing [config.name] you agree that you have completed Doki Doki Literature Club and accept any spoilers contained within."
-            "I agree.":
-                pass
-
+    if not persistent.first_run:
+        call disclaimer
         $ persistent.first_run = True
+
         with Dissolve(1.5)
         pause 1.0
         scene white
 
-    ## This variable sets skipping to False for the splash screen.
     $ config.allow_skipping = False
 
     show white
-    $ renpy.music.play(config.main_menu_music)
-    show intro with Dissolve(0.5, alpha=True)
-    $ pause(2.5)
-    hide intro with Dissolve(0.5, alpha=True)
-    show splash_warning _("This game is an unofficial fan game that is unaffiliated with Team Salvato.") with Dissolve(0.5, alpha=True)
-    $ pause(1.5)
-    hide splash_warning with Dissolve(0.5, alpha=True)
-    $ pause(0.5)
+    play music config.main_menu_music
+    show intro with dissolve_intro
+    pausem 2.5
+    hide intro with dissolve_intro
+    show splash_warning _("This game is an unofficial fan game that is unaffiliated with Team Salvato.") with dissolve_intro
+    pausem 1.5
+    hide splash_warning with dissolve_intro
+    pausem 0.5
 
     $ config.allow_skipping = True
 
     return
 
-label after_load:
-    # Load skipping toggle state saved in the save
-    $ config.allow_skipping = allow_skipping
-    $ _dismiss_pause = config.developer
-    $ style.say_dialogue = style.normal
+label disclaimer:
+    ## You can edit this message but you MUST declare that your mod is 
+    ## unaffiliated with Team Salvato, requires that the player must 
+    ## finish DDLC before playing, has spoilers for DDLC, and where to 
+    ## get DDLC's files."
+    "[config.name] is a Doki Doki Literature Club fan mod that is not affiliated in anyway with Team Salvato."
+    "It is designed to be played only after the official game has been completed, and contains spoilers for the official game."
+    "Game files for Doki Doki Literature Club are required to play this mod and can be downloaded for free at: https://ddlc.moe or on Steam."
+
+    menu:
+        "By playing [config.name] you agree that you have completed Doki Doki Literature Club and accept any spoilers contained within."
+        "I agree.":
+            pass
+
     return

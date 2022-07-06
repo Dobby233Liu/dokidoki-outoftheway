@@ -28,43 +28,6 @@ init -100 python:
     if not config.developer and len(renpy.loadsave.location.locations) > 1:
         renpy.loadsave.location.locations = renpy.loadsave.location.locations[:1]
 
-# This init python statement sets up Python functions
-# for the game.
-init python:
-    global _windows_hidden
-    _windows_hidden = False
-
-    """
-    This function gets the postition of the music playing in a given channel.
-    """
-    def get_pos(channel='music'):
-        pos = renpy.music.get_pos(channel=channel)
-        if pos: return pos
-        return 0
-
-    """
-    This recolor function allows you to recolor the GUI of DDLC easily without replacing
-    the in-game assets. Introduced in version 3.0.0 of the mod template.
-
-    Syntax to use:
-        recolorize("path/to/your/image", "#color1hex", "#color2hex", contrast value)
-    Example:
-        recolorize("gui/menu_bg.png", "#bdfdff", "#e6ffff", 1.25)
-    """
-    def recolorize(path, blackCol="#ffbde1", whiteCol="#ffe6f4", contr=1.29):
-        return im.MatrixColor(
-            im.MatrixColor(
-                im.MatrixColor(path, im.matrix.desaturate() * im.matrix.contrast(contr)),
-                im.matrix.colorize("#00f", "#fff") * im.matrix.saturation(120)
-            ),
-            im.matrix.desaturate() * im.matrix.colorize(blackCol, whiteCol)
-        )
-
-    def set_allow_skipping(allow):
-        allow_skipping = allow
-        config.allow_skipping = allow
-        return allow
-
 ## Music
 # This section declares the music available to be played in the mod.
 # Syntax:
@@ -130,3 +93,47 @@ default player = persistent.playername
 define allow_skipping = True
 
 default chapter = 0
+
+# This init python statement sets up Python functions
+# for the game.
+init python:
+    global _windows_hidden
+    _windows_hidden = False
+
+    """
+    This function gets the postition of the music playing in a given channel.
+    """
+    def get_pos(channel='music'):
+        pos = renpy.music.get_pos(channel=channel)
+        if pos: return pos
+        return 0
+
+    """
+    This recolor function allows you to recolor the GUI of DDLC easily without replacing
+    the in-game assets. Introduced in version 3.0.0 of the mod template.
+
+    Syntax to use:
+        recolorize("path/to/your/image", "#color1hex", "#color2hex", contrast value)
+    Example:
+        recolorize("gui/menu_bg.png", "#bdfdff", "#e6ffff", 1.25)
+    """
+    def recolorize(path, blackCol="#ffbde1", whiteCol="#ffe6f4", contr=1.29):
+        return im.MatrixColor(
+            im.MatrixColor(
+                im.MatrixColor(path, im.matrix.desaturate() * im.matrix.contrast(contr)),
+                im.matrix.colorize("#00f", "#fff") * im.matrix.saturation(120)
+            ),
+            im.matrix.desaturate() * im.matrix.colorize(blackCol, whiteCol)
+        )
+
+    def set_allow_skipping(allow):
+        allow_skipping = allow
+        config.allow_skipping = allow
+        return allow
+
+label after_load:
+    # Load skipping toggle state saved in the save
+    $ config.allow_skipping = allow_skipping
+    $ _dismiss_pause = config.developer
+    $ style.say_dialogue = style.normal
+    return
