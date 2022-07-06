@@ -148,7 +148,12 @@ default persistent.has_chosen_language = False
 default persistent.playername = ""
 default player = persistent.playername
 
-# Alias of config.allow_skipping for the setting to persist
+# This variable determines whether to allow the player to dismiss pauses.
+# By default this is set by config.developer which is normally set to false
+# once you packaged your mod.
+define _dismiss_pause = config.developer
+
+# Copy of config.allow_skipping for the setting to persist
 # through saves.
 # Use the set_allow_skipping function to change both.
 default allow_skipping = True
