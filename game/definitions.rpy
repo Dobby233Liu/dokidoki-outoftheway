@@ -151,7 +151,7 @@ default player = persistent.playername
 # Alias of config.allow_skipping for the setting to persist
 # through saves.
 # Use the set_allow_skipping function to change both.
-define allow_skipping = True
+default allow_skipping = True
 
 # Chapter variable for use in the mod.
 default chapter = 0
