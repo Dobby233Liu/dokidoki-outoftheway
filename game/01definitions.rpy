@@ -42,8 +42,8 @@ python early:
         _windows_hidden = False
 
     def lint_pause_mine(time):
-        if not isinstance(time, float):
-            renpy.error(tte)
+        if time and not isinstance(time, float):
+            renpy.error(time)
 
     # With my edits you can now use pausem x.x
     # in place of $ pause(x.x) lmao
